@@ -1,0 +1,17 @@
+{
+  "name": "my-house",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ip": "^1.1.5",
+    "mongoose": "^5.7.1",
+    "mosca": "^2.8.3"
+  }
+}
