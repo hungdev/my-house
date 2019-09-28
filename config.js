@@ -1,3 +1,3 @@
 module.exports = {
-    uri: "uri_mongodb"
+    uri: "mongodb_uri"
 };

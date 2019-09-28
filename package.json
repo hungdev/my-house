@@ -1,5 +1,5 @@
 {
-  "name": "my-house",
+  "name": "my-house-mqtt",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "ip": "^1.1.5",
     "mongoose": "^5.7.1",
-    "mosca": "^2.8.3"
+    "mosca": "^2.8.3",
+    "socket.io": "^2.3.0"
   }
 }

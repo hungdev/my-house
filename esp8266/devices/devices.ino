@@ -2,9 +2,9 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
-const char* ssid = "ssid_wifi";
-const char* password = "password_wifi";
-const char* mqtt_server = "mqtt_server";
+const char* ssid = "Dung Tran";
+const char* password = "99999999";
+const char* mqttServer = "184.164.94.176";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -12,11 +12,9 @@ PubSubClient client(espClient);
 void setupWifi() {
   Serial.print("\nConnect WIFI...");
   WiFi.begin(ssid, password);
-
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
-
   Serial.print("connected");
   Serial.print("\n");
   Serial.print(WiFi.localIP());
@@ -50,16 +48,19 @@ void handleOff(int device) {
   }
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
   String type = topic;
-
+  Serial.print(type);
   if (type == "devices") {
     DynamicJsonDocument doc(1024);
     deserializeJson(doc, payload);
     String device = doc["device"];
     String state = doc["state"];
-
     state == "on" ? handleOn(device.toInt()) : handleOff(device.toInt());
+    Serial.print("\n");
+    Serial.print(device);
+    Serial.print(": ");
+    Serial.print(state);
   }
 }
 
@@ -80,19 +81,17 @@ void reConnect() {
 
 void setup() {
   Serial.begin(115200);
-
   setupWifi();
-
+  
   pinMode(16, OUTPUT);
   pinMode(15, OUTPUT);
   pinMode(14, OUTPUT);
-
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  
+  client.setServer(mqttServer, 1883);
+  client.setCallback(mqttCallback);
 }
 
 void loop() {
   if (!client.connected()) reConnect();
-
   client.loop();
 }

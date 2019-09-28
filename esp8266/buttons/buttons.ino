@@ -1,10 +1,10 @@
 #include <ESP8266WiFi.h>
-#include <PubSubClient.h> // https://github.com/knolleary/pubsubclient
-#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
 
-const char* ssid = "ssid_wifi";
-const char* password = "password_wifi";
-const char* mqttServer = "ip_address_mqtt_server";
+const char* ssid = "Dung Tran";
+const char* password = "99999999";
+const char* mqttServer = "184.164.94.176";
 
 int pins[] = {16, 15, 12};
 int states[] = {0, 0, 0};
@@ -15,11 +15,9 @@ PubSubClient client(espClient);
 void setupWifi() {
   Serial.print("\nConnect WIFI...");
   WiFi.begin(ssid, password);
-  
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
-
   Serial.print("connected");
   Serial.print("\n");
   Serial.print(WiFi.localIP());
@@ -33,7 +31,6 @@ void reConnect() {
   while (!client.connected()) {
     Serial.print("\nConnect MQTT...");
     if (client.connect("esp8266_buttons")) {
-      client.subscribe("devices");
       Serial.print("connected");
     }
     else {
@@ -57,7 +54,9 @@ void setup() {
 }
 
 void loop() {
-  if (!client.connected()) reConnect();
+  if (!client.connected()) {
+    reConnect();
+  }
 
   client.loop();
 

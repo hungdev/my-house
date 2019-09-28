@@ -1,16 +1,18 @@
+// librarys
 const mosca = require('mosca');
 const ip = require('ip');
 const mongoose = require('mongoose');
 const config = require('./config');
 const Devices = require('./models/devices');
 
+// connect mongodb, your mongodb uri in: config.js
 mongoose.connect(config.uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true
 }, () => {
-    console.log('MongoDB connected');
+
 });
 
 const settings = {
@@ -19,6 +21,7 @@ const settings = {
 
 const server = new mosca.Server(settings);
 
+// handle connected
 server.on('clientConnected', (client) => {
     setTimeout(() => {
         Devices.find().exec((error, response) => {
@@ -28,14 +31,20 @@ server.on('clientConnected', (client) => {
                     payload: JSON.stringify({ device: res.device, name: res.name, state: res.state })
                 });
             });
+            let devices = response.map(res => {
+                return new Object({ device: res.device, name: res.name, state: res.state });
+            });
+            server.publish({
+                topic: 'server',
+                payload: JSON.stringify(devices)
+            });
         });
     }, 1e3);
 });
 
+// handle publish
 server.on('published', (packet, client) => {
-    if (packet.topic == 'devices') console.log(packet.topic, JSON.parse(packet.payload.toString()));
     if (packet.topic == 'control') {
-        console.log(packet.topic, JSON.parse(packet.payload.toString()));
         let device = JSON.parse(packet.payload.toString());
         Devices.findOneAndUpdate({ device: device.device }, {
             state: device.state
@@ -46,6 +55,13 @@ server.on('published', (packet, client) => {
                         topic: 'devices',
                         payload: JSON.stringify({ device: res.device, name: res.name, state: res.state })
                     });
+                });
+                let devices = response.map(res => {
+                    return new Object({ device: res.device, name: res.name, state: res.state });
+                });
+                server.publish({
+                    topic: 'server',
+                    payload: JSON.stringify(devices)
                 });
             });
         });
