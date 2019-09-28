@@ -12,8 +12,6 @@ clone project to your vps or your computer
 ### Web Server
 1. `node web-server`
 
-![webapp](webapp.png)
-
 ### Webapp Development Environment
 1. `cd webapp`
 2. `npm install`
@@ -23,7 +21,7 @@ clone project to your vps or your computer
 1. `cd webapp`
 2. `npm run build`
 
-![esp8266](esp8266.png)
+![webapp](webapp.png)
 
 ### ESP8266 Devices
 1. Download and add librarys
@@ -36,3 +34,5 @@ clone project to your vps or your computer
     - [https://github.com/knolleary/pubsubclient](https://github.com/knolleary/pubsubclient)
     - [https://github.com/bblanchon/ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 2. Modify IP address of mqtt server into esp8266/buttons.ino then flash to esp8266
+
+![esp8266](esp8266.png)
